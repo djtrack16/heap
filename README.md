@@ -18,9 +18,11 @@ Binary heap implementation. Only supports minimum heap property for now. Minimum
 h = BinaryHeap()
 
 **Builds a heap from the following list built by range**
+
 h.buildHeap(range(20,-1,1))
 
 **Insert element into heap**
+
 h.insert(element)
 
 TODO:
