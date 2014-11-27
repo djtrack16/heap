@@ -41,7 +41,7 @@ h.buildHeap(range(1000,-1,-3))
 
 *Validation*
 
-h.isValid(1, len(h)/2)
+h.isHeap() - is this a valid heap or not? 
 
 *Retrieval*
 
