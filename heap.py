@@ -15,15 +15,16 @@ class Heap():
 	#TODO - add support for maxheap
 
 
-	''' We build the heap as a complete binary tree, with list as internal representation.
-		The representation is as follows:
-		If a node is at index k, its left child is at index 2*k, right child at 2*k+1
-		No node will have a right child before it has a left child. In complete binary tree,
-		levels are always filled from left to right and tree is always well-balanced.
-		Of course, we could have built this as a binary tree with every node having links
-		to its parent. That seems a bit more intuitive and we don't have to worry about indexing
-		through the list.
-		We choose zero as a dummy element at heap[0] 
+	'''
+	We build the heap as a complete binary tree, with list as internal representation.
+	The representation is as follows:
+	If a node is at index k, its left child is at index 2*k, right child at 2*k+1
+	No node will have a right child before it has a left child. In complete binary tree,
+	levels are always filled from left to right and tree is always well-balanced.
+	Of course, we could have built this as a binary tree with every node having links
+	to its parent. That seems a bit more intuitive and we don't have to worry about indexing
+	through the list.
+	We choose zero as a dummy element at heap[0] 
 	'''
 
 	def __init__(self):
@@ -32,8 +33,7 @@ class Heap():
 		self.heap = [0] 
 		self.size = 0
 
-	''' Get top element
-	'''
+	''' Get top element '''
 	def peek(self):
 		if self.isEmpty():
 			return None
@@ -41,6 +41,7 @@ class Heap():
 
 	def __contains__(self, elem):
 		return elem in self.heap
+
 
 	def heapifyDown(self, parent):
 		while (parent*2) < len(self):
@@ -54,8 +55,9 @@ class Heap():
 
 			parent = minChild
 
-	''' As we are rearranging the heap in a top-down fashion, we swap with the node that is minimum
-		of its left and right child, in order to preserve the heap ordering property.
+	'''
+	As we are rearranging the heap in a top-down fashion, we swap with the node that is minimum
+	of its left and right child, in order to preserve the heap ordering property.
 	'''
 	def getChildForSwap(self, i):
 		left = 2*i
@@ -68,8 +70,9 @@ class Heap():
 			return left
 		return right
 
-	''' Delete the minimum, set last element equal to first element, then rearrange the heap for the
-		elements we just swapped
+	'''
+	Delete the minimum, set last element equal to first element, then rearrange the heap for the
+	elements we just swapped
 	'''
 	def delMin(self):
 		if self.isEmpty():
@@ -85,10 +88,11 @@ class Heap():
 	def __len__(self):
 		return self.size
 
-	''' Builds a heap from a list of keys. We initialize the list, then starting at the halfway point of the array. 
-		Eveyr node after this one will have no children, so we want to heapify down for every node BEFORE this node
-		We rearrange the heap in a bottom-up fashion, rearranging the parents,so as to place the maximally valued
-		elements towards the bottom. 
+	''' 
+	Builds a heap from a list of keys. We initialize the list, then starting at the halfway point of the array. 
+	Every node after this one will have no children, so we want to heapify down for every node BEFORE this node
+	We rearrange the heap in a bottom-up fashion, rearranging the parents,so as to place the maximally valued
+	elements towards the bottom. 
 	'''
 	def buildHeap(self, a):
 		self.heap = [0] + a[:]
@@ -96,9 +100,10 @@ class Heap():
 			self.heapifyDown(parent)
 
 
-	''' Whenever we insert a element, we have to rearrange the heap in bottom-up fashion
-		by doing a swap at each node, based on whether the current child is less than its parent
-		We stop when are at the root, or if heap is ordered properly.
+	'''
+	Whenever we insert a element, we have to rearrange the heap in bottom-up fashion
+	by doing a swap at each node, based on whether the current child is less than its parent
+	We stop when are at the root, or if heap is ordered properly.
 	'''
 	def heapifyUp(self, i):
 		#h = self.h
@@ -115,8 +120,9 @@ class Heap():
 
 
 
-	''' To Insert a key, we append it to the list, increment size, and then rearrange the heap
-		to put the element in the proper place, thus maintaining the heap order property
+	''' 
+	To Insert a key, we append it to the list, increment size, and then rearrange the heap
+	to put the element in the proper place, thus maintaining the heap order property
 	'''
 	def insert(self, key):
 		self.heap.append(key)
@@ -134,9 +140,10 @@ class Heap():
 
 
 
-	''' How we print the heap, print each key with its children ('' for null children)
-		Useful for visual representation of the heap, on paper or whiteboard, etc
-		Note: no key after index=(size/2) has children, so we simply print remaining keys
+	'''	
+	How we print the heap, print each key with its children ('' for null children)
+	Useful for visual representation of the heap, on paper or whiteboard, etc
+	Note: no key after index=(size/2) has children, so we simply print remaining keys
 	'''
 	def __str__(self):
 		size = len(self)
@@ -149,9 +156,7 @@ class Heap():
 		return tree
 
 	# Exhaustively traverse entire heap to ensure every subtree is ordered properly
-	# quits upon first error. It is unlikely that the heap will be out of order, but then again,
-	# who knows? You can use 1 (e.g. root) as start index and size/2+1 as the array
-
+	# quits upon first error.
 	def isValid(self, index, size):
 		if index >= size:
 			return True
