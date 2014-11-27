@@ -33,18 +33,18 @@ class Heap():
 		self.heap = [0] 
 		self.size = 0
 
-	''' Get top element '''
+	''' Get top element, but doesn't remove it '''
 	def peek(self):
 		if self.isEmpty():
 			return None
-		return self.h[1]
+		return self.heap[1]
 
 	def __contains__(self, elem):
 		return elem in self.heap
 
 
 	def heapifyDown(self, parent):
-		while (parent*2) < len(self):
+		while (parent*2) <= len(self):
 		
 			minChild = self.getChildForSwap(parent)
 			# if no need to swap, we are done rearranging heap
@@ -70,17 +70,16 @@ class Heap():
 			return left
 		return right
 
-	'''
-	Delete the minimum, set last element equal to first element, then rearrange the heap for the
-	elements we just swapped
-	'''
-	def delMin(self):
+	''' Save then delete the minimum, swap first and last element, then rearrange the heap '''
+	def pop(self):
 		if self.isEmpty():
 			return
-		self.heap[1] = self.heap[-1]
+		minimum = self.peek()
+		self.swap(1,-1) # swap first and last element
 		self.heap.pop()
 		self.size -= 1
 		self.heapifyDown(1)
+		return minimum
 
 	def isEmpty(self):
 		return self.size == 1 # 1 for our dummy element
@@ -96,8 +95,10 @@ class Heap():
 	'''
 	def buildHeap(self, a):
 		self.heap = [0] + a[:]
+		self.size = len(a)
 		for parent in range(len(a)//2, 0, -1):
 			self.heapifyDown(parent)
+		
 
 
 	'''
@@ -110,7 +111,7 @@ class Heap():
 		while i // 2 > 0:
 			# if key is less than its parent, do basic swap
 			# if not, we are done
-			if self.heap[i] < self.heap[i // 2]:
+			if self.heap[i] <= self.heap[i // 2]:
 				self.swap(i//2, i)
 			else:
 				break
@@ -150,14 +151,16 @@ class Heap():
 		tree = ''
 		for k in xrange(1,size/2+1):
 			node = self.heap[k]
-			left = self.heap[2*k] if 2*k < size else ''
-			right = self.heap[2*k+1] if 2*k+1 < size else ''
+			left = self.heap[2*k] if 2*k <= size else ''
+			right = self.heap[2*k+1] if 2*k+1 <= size else ''
 			tree += 'node: %d, left: %s, right: %s\n' % (node, str(left), str(right))
 		return tree
 
-	# Exhaustively traverse entire heap to ensure every subtree is ordered properly
-	# quits upon first error.
-	def isValid(self, index, size):
+	'''
+	Exhaustively traverse entire heap to ensure every subtree is ordered properly
+	quits upon first error. We can use index=startIndex and size= heapsize/2.
+	'''
+	def isHeapRec(self, index, size):
 		if index >= size:
 			return True
 		node = self.heap[index]
@@ -165,4 +168,7 @@ class Heap():
 		# so our statement is true if either or both children are None
 		left = self.heap[2*index] if 2*index < size else sys.maxint
 		right = self.heap[2*index+1] if 2*index+1 < size else sys.maxint
-		return left > node and right > node and self.isValid(2*index, size) and self.isValid(2*index+1, size)
+		return left >= node and right >= node and self.isHeapRec(2*index, size) and self.isHeapRec(2*index+1, size)
+
+	def isHeap(self):
+		return self.isHeapRec(1, len(self)/2+1)
