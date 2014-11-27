@@ -18,18 +18,22 @@ class Heap():
 	'''
 	We build the heap as a complete binary tree, with list as internal representation.
 	The representation is as follows:
-	If a node is at index k, its left child is at index 2*k, right child at 2*k+1
+	If a node is at index k:
+	the left child is at index 2*k
+	the right child is at index 2*k+1
+	the parent is at k//2,
+	assuming: 0 < 2*k < 2*k+1 <= size and k//2 > 0
 	No node will have a right child before it has a left child. In complete binary tree,
 	levels are always filled from left to right and tree is always well-balanced.
-	Of course, we could have built this as a binary tree with every node having links
+	Of course, we could have built this as a binary tree with every node having a link
 	to its parent. That seems a bit more intuitive and we don't have to worry about indexing
 	through the list.
-	We choose zero as a dummy element at heap[0] 
 	'''
 
 	def __init__(self):
 		# the entire implementation is OBO if not for this dummy element
-		# We can choose not to use zero as dummy element, but then left child is @ 2i+1, right child is at 2*i+2
+		# We can choose not to use zero as dummy element to make 1-based array, otherwise,
+		# without this dummy element, left child is @ 2i+1, right child @ 2i+2
 		self.heap = [0] 
 		self.size = 0
 
@@ -42,7 +46,26 @@ class Heap():
 	def __contains__(self, elem):
 		return elem in self.heap
 
+	'''
+	Whenever we insert a element at the end of the heap, we have to rearrange the heap in bottom-up fashion
+	by doing a swap at each node if and only if the current child is less or equal to than its parent
+	We stop by arriving at root, or when child is greater than parent.
+	'''
+	def heapifyUp(self, child):
+		while child // 2 > 0:
+			# if key is less than its parent, do basic swap
+			# if not, we are done
+			if self.heap[child] <= self.heap[child // 2]:
+				self.swap(child//2, child)
+			else:
+				break
+			# this is how we get parent of current node
+			child //= 2
 
+	'''
+	Same as above method, except in top-down fashion, so comparing with children instead of parents
+	Used whenever we delete the min
+	'''
 	def heapifyDown(self, parent):
 		while (parent*2) <= len(self):
 		
@@ -82,7 +105,7 @@ class Heap():
 		return minimum
 
 	def isEmpty(self):
-		return self.size == 1 # 1 for our dummy element
+		return self.size == 0 # 1 for our dummy element
 
 	def __len__(self):
 		return self.size
@@ -98,26 +121,6 @@ class Heap():
 		self.size = len(a)
 		for parent in range(len(a)//2, 0, -1):
 			self.heapifyDown(parent)
-		
-
-
-	'''
-	Whenever we insert a element, we have to rearrange the heap in bottom-up fashion
-	by doing a swap at each node, based on whether the current child is less than its parent
-	We stop when are at the root, or if heap is ordered properly.
-	'''
-	def heapifyUp(self, i):
-		#h = self.h
-		while i // 2 > 0:
-			# if key is less than its parent, do basic swap
-			# if not, we are done
-			if self.heap[i] <= self.heap[i // 2]:
-				self.swap(i//2, i)
-			else:
-				break
-			# this is how we get parent of current node
-			i //= 2
-
 
 
 
@@ -134,9 +137,7 @@ class Heap():
 
 	''' Basic swap algorithm of two nodes in the heap '''
 	def swap(self, i, j):
-		temp = self.heap[i]
-		self.heap[i] = self.heap[j]
-		self.heap[j] = temp
+		self.heap[i],self.heap[j] = self.heap[j],self.heap[i]
 
 
 
