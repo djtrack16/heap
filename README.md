@@ -1,7 +1,7 @@
 heap
 ====
 
-Binary heap implementation, internally represented as a list. Only supports minimum heap property for now.
+Binary heap implementation, internally represented as a list. Only supports minimum heap property for now. I use this heap quite a bit in personal projects and when trying out some new algorithm.
 
 **Advantages**
 
